@@ -3,9 +3,11 @@ require_once 'DBConnect.php';
 require_once 'ContactManager.php';
 require_once 'Contact.php';
 require_once 'Command.php';
+require_once 'config.php';
 
 //création de mon instance pour la classe DBConnect//
-$monConnecteur = new DBConnect();
+$dbconnect = DBConnect::getInstance();
+$monConnecteur = $dbconnect->getPDO();
 
 //Création de mon instance pour la class ContactManager en lui passant l'objet DBConnect//
 $contactmanager = new ContactManager($monConnecteur);
@@ -66,6 +68,9 @@ while (true) {
         // Appelle la méthode delete() de Command pour supprimer un contact avec l'ID
         $command->delete($id);
     
+
+        //***************Commande Help*****************************/
+        //Permet de voir toutes les commandes mise en place pour l'utilisation du terminal//
         } elseif ($line === "help") {
            
                 echo "commandes disponibles" .  PHP_EOL;

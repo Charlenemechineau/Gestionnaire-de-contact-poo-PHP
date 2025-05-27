@@ -6,10 +6,10 @@ class ContactManager {
     private $pdo;
 
     //Constructeur de ma classe qui sera éxécuter automatiquement Lorsqu'un objet de la classe est créé//
-    public function __construct(DBConnect $dbconnect){
+    public function __construct(PDO $dbconnect){
 
         //Je récupère l'objet PDO de la classe DBConnect et le stock dans la propriété $dbconnect ce qui va nous permettre d'intéragire avec la base de données//
-        $this->pdo = $dbconnect->getPDO();  
+        $this->pdo = $dbconnect;  
     }
 
     //Méthode qui permet de récupérer tous les contacts de la base de données. Cette méthode retourne un tableau d'objets Contact//
@@ -92,16 +92,22 @@ class ContactManager {
     }
 
 
-    // Cette méthode me permet de supprimer un contact en fonction de son ID//
+    // Cette méthode permet de supprimer un contact en fonction de son ID
     public function deleteContact(int $id) {
 
-        //Permet de préparer ma requête SQL pour supprimer le contact//
+        // Permet de préparer ma requête SQL pour supprimer le contact
         $query = $this->pdo->prepare("DELETE FROM contact WHERE id = :id");
+        // Ici, on prépare une requête SQL pour supprimer un enregistrement de la table 'contact'
+        // en fonction de l'ID spécifié dans le paramètre :id. L'utilisation de :id permet de lier un
+        // paramètre à la requête SQL, ce qui protège contre les injections SQL.
 
-      
         $query->bindParam(":id", $id, PDO::PARAM_INT);
+        // On lie le paramètre :id de la requête préparée à la valeur de la variable $id.
+        // Cela permet de s'assurer que l'ID sera correctement inséré dans la requête SQL en tant qu'entier (PDO::PARAM_INT).
 
-        return $query->execute() ;
+        return $query->execute();
+        // Exécute la requête préparée. La méthode execute() retourne true si la requête a réussi
+        // (contact supprimé) ou false si quelque chose a échoué.
 
     }
 }
